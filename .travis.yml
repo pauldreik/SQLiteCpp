@@ -14,15 +14,6 @@ cache:
 matrix:
   include:
     - env: CXX=g++-5 CC=gcc-5
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-precise
-            - ubuntu-toolchain-r-test
-          packages:
-            - clang-3.7
-            - g++-5
-            - gcc-5
     - env: CXX=clang++-3.8 CC=clang-3.8
       addons:
         apt:
@@ -49,6 +40,10 @@ addons:
   apt:
     packages:
     - cppcheck
+    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    - sudo apt-get update
+    - sudo apt-get install -qq g++-4.9
+    - sudo apt-get install -qq g++-5
 
 before_install:
   - pip install --user cpp-coveralls
