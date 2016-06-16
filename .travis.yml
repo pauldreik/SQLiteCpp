@@ -79,6 +79,16 @@ matrix:
       env:
         - CXX=g++-6
         - CXXFLAGS="-std=c++1z"
+    - compiler: gcc 6 c++14 all warnings, pedantic
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++14 -Wall -Wextra -pedantic"
 
 #does not work - gives "The LLVM APT rpository is currently available. Your builds may fail if your build updates LLVM/clang to a newer version with 'apt'. Please see https://github.com/travis-ci/travis-ci/issues/6120#issuecomment-224072540 for a workaround."
 #    - compiler: clang
