@@ -11,7 +11,7 @@ cache:
 
 matrix:
   include:
-    - compiler: gcc
+    - compiler: gcc 4.9
       addons:
         apt:
           sources:
@@ -19,7 +19,27 @@ matrix:
           packages:
             - g++-4.9
       env: CXX=g++-4.9
-    - compiler: gcc5 c++14
+    - compiler: gcc 5 c++03
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++03"
+    - compiler: gcc 5 c++11
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++11"
+    - compiler: gcc 5 c++14
       addons:
         apt:
           sources:
@@ -29,6 +49,36 @@ matrix:
       env:
         - CXX=g++-5
         - CXXFLAGS="-std=c++14"
+    - compiler: gcc 5 c++1z
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++1z"
+    - compiler: gcc 6 c++14
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++14"
+    - compiler: gcc 6 c++1z
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++1z"
 
 #does not work - gives "The LLVM APT rpository is currently available. Your builds may fail if your build updates LLVM/clang to a newer version with 'apt'. Please see https://github.com/travis-ci/travis-ci/issues/6120#issuecomment-224072540 for a workaround."
 #    - compiler: clang
