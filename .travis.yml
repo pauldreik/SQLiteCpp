@@ -6,22 +6,8 @@ sudo: false
 
 language: generic
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - libstdc++6
-
 cache:
   apt: true
-  directories:
-    - llvm-3.7.0
-
-env:
-  global:
-    - LLVM_VERSION=3.7.0
-    - LLVM_ARCHIVE_PATH=$HOME/clang+llvm.tar.xz
 
 matrix:
   include:
@@ -33,30 +19,16 @@ matrix:
           packages:
             - g++-4.9
       env: CXX=g++-4.9
-    - compiler: gcc
+    - compiler: gcc5 c++14
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
-      env: CXX=g++-5
-    - compiler: clang
       env:
-        - CC=clang
-        - CXX=clang++
-        - npm_config_clang=1
-        - LLVM_VERSION=3.7.0
-        - LLVM_ARCHIVE_PATH=$HOME/clang+llvm.tar.xz
-        - CXX=$HOME/clang-$LLVM_VERSION/bin/clang++
-        - CPPFLAGS="-I $HOME/clang-$LLVM_VERSION/include/c++/v1"
-        - CXXFLAGS=-lc++
-        - LD_LIBRARY_PATH=$HOME/clang-$LLVM_VERSION/lib:$LD_LIBRARY_PATH
-      before_install:
-        - wget http://llvm.org/releases/$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-14.04.tar.xz -O $LLVM_ARCHIVE_PATH
-        - mkdir $HOME/clang-$LLVM_VERSION
-        - tar xf $LLVM_ARCHIVE_PATH -C $HOME/clang-$LLVM_VERSION --strip-components 1
-
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++14"
 
 #does not work - gives "The LLVM APT rpository is currently available. Your builds may fail if your build updates LLVM/clang to a newer version with 'apt'. Please see https://github.com/travis-ci/travis-ci/issues/6120#issuecomment-224072540 for a workaround."
 #    - compiler: clang
@@ -81,15 +53,13 @@ matrix:
 
 before_install:
   - pip install --user cpp-coveralls
-  - wget http://llvm.org/releases/$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-14.04.tar.xz -O $LLVM_ARCHIVE_PATH
-  - mkdir $HOME/clang+llvm
-  - tar xf $LLVM_ARCHIVE_PATH -C $HOME/clang+llvm --strip-components 1
-  - export PATH=$HOME/clang+llvm/bin:$PATH
 
 # scripts to run before build
 before_script:
   - mkdir build
   - cd build
+  - echo CXX is $CXX with version
+  - $CXX --version
   - cmake -DCMAKE_BUILD_TYPE=Debug -DSQLITECPP_USE_GCOV=ON -DSQLITECPP_BUILD_EXAMPLES=ON -DSQLITECPP_BUILD_TESTS=ON ..
 
 # build examples, and run tests (ie make & make test)
