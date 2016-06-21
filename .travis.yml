@@ -1,20 +1,126 @@
 # Copyright (c) 2012-2016 Sebastien Rombauts (sebastien.rombauts@gmail.com)
 
-language: cpp
 
-# compilers to add to build matrix
-compiler:
-  - gcc
-  - clang
 
 # request for Ubuntu 14.04 Trusty VM
 sudo: true
 dist: trusty
+language: generic
 
-addons:
-  apt:
-    packages:
-    - cppcheck
+cache:
+  apt: true
+
+matrix:
+  include:
+    - compiler: gcc 4.9
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env: CXX=g++-4.9
+    - compiler: gcc 5 c++03
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++03"
+    - compiler: gcc 5 c++11
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++11"
+    - compiler: gcc 5 c++14
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++14"
+    - compiler: gcc 5 c++1z
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - CXX=g++-5
+        - CXXFLAGS="-std=c++1z"
+    - compiler: gcc 6 c++14
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++14"
+    - compiler: gcc 6 c++1z
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++1z"
+    - compiler: gcc 6 c++14 all warnings, pedantic
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++14 -Wall -Wextra -pedantic"
+    - compiler: gcc 6 address and undef sanitizer
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - CXX=g++-6
+        - CXXFLAGS="-std=c++14 -fsanitize=address -fsanitize=undefined"
+        
+#does not work - gives "The LLVM APT rpository is currently available. Your builds may fail if your build updates LLVM/clang to a newer version with 'apt'. Please see https://github.com/travis-ci/travis-ci/issues/6120#issuecomment-224072540 for a workaround."
+#    - compiler: clang
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#            - llvm-toolchain-precise-3.6
+#          packages:
+#            - clang-3.6
+#      env: CXX=clang++-3.6
+#    - compiler: clang
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#            - llvm-toolchain-precise-3.7
+#          packages:
+#            - clang-3.7
+#      env: CXX=clang++-3.7
+
 
 before_install:
   - if [[ "$CXX" == "g++" ]]; then pip install --user cpp-coveralls ; fi
@@ -23,6 +129,8 @@ before_install:
 before_script:
   - mkdir build
   - cd build
+  - echo CXX is $CXX with version
+  - $CXX --version
   - cmake -DCMAKE_BUILD_TYPE=Debug -DSQLITECPP_USE_GCOV=ON -DSQLITECPP_BUILD_EXAMPLES=ON -DSQLITECPP_BUILD_TESTS=ON ..
 
 # build examples, and run tests (ie make & make test)
