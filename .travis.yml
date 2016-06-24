@@ -5,13 +5,17 @@
 # request for Ubuntu 14.04 Trusty VM
 sudo: true
 dist: trusty
-language: generic
+language: cpp
 
 cache:
   apt: true
 
 matrix:
   include:
+    - compiler: gcc default
+      env: CXX=g++
+    - compiler: clang default
+      env: CXX=clang++
     - compiler: gcc 4.9
       addons:
         apt:
