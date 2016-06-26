@@ -114,7 +114,7 @@ matrix:
       osx_image: xcode8
       compiler: clang
       install:
-       - cmake --version
+       - brew install cmake
       env:
        - COMPILER=clang
        - COMPILERXX=clang
