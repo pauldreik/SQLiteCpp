@@ -13,16 +13,16 @@ cache:
 matrix:
   include:
       # gcc default
-    - env: CXX=g++
+    - env: COMPILERXX=g++
       # clang default
-    - env: CXX=clang++
+    - env: COMPILERXX=clang++
       # clang 3.8
     - os: linux
       env:
         - LLVM_VERSION=3.8.0
         - LLVM_ARCHIVE_PATH=$HOME/clang+llvm.tar.xz
         - COMPILER=clang++
-        - CXX=clang++
+        - COMPILERXX=clang++
         - CPPFLAGS="-I $HOME/clang-$LLVM_VERSION/include/c++/v1"
         - CXXFLAGS=-lc++
         - PATH=$HOME/clang-$LLVM_VERSION/bin:$PATH
@@ -38,7 +38,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
-      env: CXX=g++-4.9
+      env: COMPILERXX=g++-4.9
     # gcc 5 std=c++03
     - addons:
         apt:
@@ -47,7 +47,7 @@ matrix:
           packages:
             - g++-5
       env:
-        - CXX=g++-5
+        - COMPILERXX=g++-5
         - CXXFLAGS="-std=c++03"
     # gcc 5 std=c++11
     - addons:
@@ -57,7 +57,7 @@ matrix:
           packages:
             - g++-5
       env:
-        - CXX=g++-5
+        - COMPILERXX=g++-5
         - CXXFLAGS="-std=c++11"
     # gcc 5 std=c++14
     - addons:
@@ -67,7 +67,7 @@ matrix:
           packages:
             - g++-5
       env:
-        - CXX=g++-5
+        - COMPILERXX=g++-5
         - CXXFLAGS="-std=c++14"
     # gcc 5 std=c++1z
     - addons:
@@ -77,7 +77,7 @@ matrix:
           packages:
             - g++-5
       env:
-        - CXX=g++-5
+        - COMPILERXX=g++-5
         - CXXFLAGS="-std=c++1z"
     # gcc 6 std=c++14
     - addons:
@@ -87,7 +87,7 @@ matrix:
           packages:
             - g++-6
       env:
-        - CXX=g++-6
+        - COMPILERXX=g++-6
         - CXXFLAGS="-std=c++14"
     # gcc 6 std=c++1z
     - addons:
@@ -97,7 +97,7 @@ matrix:
           packages:
             - g++-6
       env:
-        - CXX=g++-6
+        - COMPILERXX=g++-6
         - CXXFLAGS="-std=c++1z"
         # gcc 6 std=c++14 all warnings, pedantic
     - addons:
@@ -107,7 +107,7 @@ matrix:
           packages:
             - g++-6
       env:
-        - CXX=g++-6
+        - COMPILERXX=g++-6
         - CXXFLAGS="-std=c++14 -Wall -Wextra -pedantic"
 #fails with /usr/bin/ld: unrecognized option '--push-state' 
 #    - compiler: gcc 6 address and undef sanitizer
@@ -118,7 +118,7 @@ matrix:
 #          packages:
 #            - g++-6
 #      env:
-#        - CXX=g++-6
+#        - COMPILERXX=g++-6
 #        - CXXFLAGS="-std=c++14 -fsanitize=address -fsanitize=undefined"
         
 #does not work - gives "The LLVM APT rpository is currently available. Your builds may fail if your build updates LLVM/clang to a newer version with 'apt'. Please see https://github.com/travis-ci/travis-ci/issues/6120#issuecomment-224072540 for a workaround."
@@ -149,7 +149,8 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - echo CXX is $CXX with version
+  - export CXX=$COMPILERXX
+  - echo CXX is $CXX CXXFLAGS is $CXXFLAGS
   - $CXX --version
   - cmake -DCMAKE_BUILD_TYPE=Debug -DSQLITECPP_USE_GCOV=ON -DSQLITECPP_BUILD_EXAMPLES=ON -DSQLITECPP_BUILD_TESTS=ON ..
 
