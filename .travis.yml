@@ -99,7 +99,7 @@ matrix:
       env:
         - COMPILERXX=g++-6
         - CXXFLAGS="-std=c++1z"
-        # gcc 6 std=c++14 all warnings, pedantic
+    # gcc 6 std=c++14 all warnings, pedantic
     - addons:
         apt:
           sources:
@@ -109,6 +109,14 @@ matrix:
       env:
         - COMPILERXX=g++-6
         - CXXFLAGS="-std=c++14 -Wall -Wextra -pedantic"
+     # os x
+    - os: osx
+      osx_image: xcode8
+      compiler: clang
+      env:
+       - COMPILER=clang
+       - COMPILERXX=clang
+       - CXXFLAGS=-lstdc++
 #fails with /usr/bin/ld: unrecognized option '--push-state' 
 #    - compiler: gcc 6 address and undef sanitizer
 #      addons:
@@ -150,7 +158,7 @@ before_script:
   - mkdir build
   - cd build
   - export CXX=$COMPILERXX
-  - echo CXX is $CXX CXXFLAGS is $CXXFLAGS
+  - echo CXX is $CXX CXXFLAGS is $CXXFLAGS CPPFLAGS is $CPPFLAGS
   - $CXX --version
   - cmake -DCMAKE_BUILD_TYPE=Debug -DSQLITECPP_USE_GCOV=ON -DSQLITECPP_BUILD_EXAMPLES=ON -DSQLITECPP_BUILD_TESTS=ON ..
 
