@@ -1,6 +1,7 @@
 Debug
 Release
 build
+builddir
 example1
 *.a
 
