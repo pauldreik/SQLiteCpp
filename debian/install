@@ -1,0 +1,2 @@
+builddir/libSQLiteCpp.a usr/lib
+include/SQLiteCpp/* usr/include/SQLiteCpp
